@@ -1,41 +1,16 @@
-#https://github.com/cakephp/cakephp-codesniffer/archive/0.1.11.tar.gz
-#http://cakephp.org
-#http://pear.cakephp.org/get/CakePHP_CodeSniffer-0.1.11.tgz
-#http://pear.cakephp.org/get/CakePHP_CodeSniffer-0.1.13.tgz
 pkgname=php-codesniffer-cakephp
-pkgver=20130718
+_pkgname=CakePHP_CodeSniffer
+pkgver=0.1.14
 pkgrel=1
 pkgdesc="PHP_CodeSniffer rules for checking code against the CakePHP coding standards."
 url='https://github.com/cakephp/cakephp-codesniffer.git'
 arch=("any")
 license=('MIT')
-#makedepends=('phing')
+source=('http://pear.cakephp.org/get/CakePHP_CodeSniffer-0.1.14.tgz')
+md5sums=('85c60e5586e10f831aedf3b8f28e349c')
 
-_gitroot="https://github.com/cakephp/cakephp-codesniffer.git"
-_gitname="cakephp-codesniffer"
-
-build() {
+package() {
     cd ${srcdir}
-    msg "Connecting to GIT server...."
-
-    if [ -d $_gitname ] ; then
-        cd $_gitname && git pull origin
-        msg "The local files are updated."
-    else
-        git clone $_gitroot $_gitname
-    fi
-
-    msg "GIT checkout done or server timeout"
-    msg "Starting make..."
-
-    cd ${srcdir}/${_gitname}
-
-    rm README.mdown
-    rm build.xml
     mkdir -p ${pkgdir}/usr/share/pear/PHP/CodeSniffer/Standards
-    mv -v ${srcdir}/${_gitname} ${pkgdir}/usr/share/pear/PHP/CodeSniffer/Standards/CakePHP
-    #phing release
-    #/usr/share/pear/PHP/CodeSniffer
-    #phing
+    mv ${_pkgname}-${pkgver} ${pkgdir}/usr/share/pear/PHP/CodeSniffer/Standards/CakePHP
 }
-
