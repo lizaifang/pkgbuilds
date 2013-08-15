@@ -1,0 +1,30 @@
+pkgname=php-codesniffer-codeigniter
+pkgver=20130326
+pkgrel=2
+pkgdesc="An implementation of CodeIgniter's coding convention for PHP_CodeSniffer"
+url='https://github.com/thomas-ernest/CodeIgniter-for-PHP_CodeSniffer'
+arch=("any")
+#depends=('apache-ant')
+_gitroot="https://github.com/thomas-ernest/CodeIgniter-for-PHP_CodeSniffer.git"
+_gitname="CodeIgniter-for-PHP_CodeSniffer"
+
+build() {
+    cd ${srcdir}
+    msg "Connecting to GIT server...."
+
+    if [ -d $_gitname ] ; then
+        cd $_gitname && git pull origin
+        msg "The local files are updated."
+    else
+        git clone $_gitroot $_gitname
+    fi
+
+    msg "GIT checkout done or server timeout"
+    msg "Starting make..."
+
+    cd ${srcdir}/${_gitname}
+
+    mkdir -p ${pkgdir}/usr/share/pear/PHP/CodeSniffer/Standards
+    #ant -Dphpcs.dir="${pkgdir}/usr/share/pear/PHP/CodeSniffer/"
+    mv -v ${srcdir}/${_gitname}/src ${pkgdir}/usr/share/pear/PHP/CodeSniffer/Standards/CodeIgniter
+}

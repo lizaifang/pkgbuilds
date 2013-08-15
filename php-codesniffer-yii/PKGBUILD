@@ -1,0 +1,36 @@
+pkgname=php-codesniffer-yii
+pkgver=20130326
+pkgrel=1
+pkgdesc="Yii Framework PHP CodeSniffer Coding Standard"
+url='https://github.com/Ardem/yii-coding-standard'
+arch=("any")
+#makedepends=('phing')
+
+_gitroot="https://github.com/Ardem/yii-coding-standard.git"
+_gitname="yii-codesniffer"
+
+build() {
+    cd ${srcdir}
+    msg "Connecting to GIT server...."
+
+    if [ -d $_gitname ] ; then
+        cd $_gitname && git pull origin
+        msg "The local files are updated."
+    else
+        git clone $_gitroot $_gitname
+    fi
+
+    msg "GIT checkout done or server timeout"
+    msg "Starting make..."
+
+    cd ${srcdir}/${_gitname}
+
+    #rm README.mdown
+    #rm build.xml
+    mkdir -p ${pkgdir}/usr/share/pear/PHP/CodeSniffer/Standards
+    mv -v ${srcdir}/${_gitname}/Yii ${pkgdir}/usr/share/pear/PHP/CodeSniffer/Standards/Yii
+    #phing release
+    #/usr/share/pear/PHP/CodeSniffer
+    #phing
+}
+

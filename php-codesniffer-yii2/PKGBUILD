@@ -1,0 +1,31 @@
+pkgname=php-codesniffer-yii2
+pkgver=20130326
+pkgrel=1
+pkgdesc="Yii 2 coding standards"
+url='https://github.com/yiisoft/yii2-coding-standards'
+arch=("any")
+#makedepends=('phing')
+
+_gitroot="https://github.com/yiisoft/yii2-coding-standards.git"
+_gitname="yii2-codesniffer"
+
+build() {
+    cd ${srcdir}
+    msg "Connecting to GIT server...."
+
+    if [ -d $_gitname ] ; then
+        cd $_gitname && git pull origin
+        msg "The local files are updated."
+    else
+        git clone $_gitroot $_gitname
+    fi
+
+    msg "GIT checkout done or server timeout"
+    msg "Starting make..."
+
+    cd ${srcdir}/${_gitname}
+
+    mkdir -p ${pkgdir}/usr/share/pear/PHP/CodeSniffer/Standards
+    mv -v ${srcdir}/${_gitname}/Yii2 ${pkgdir}/usr/share/pear/PHP/CodeSniffer/Standards/Yii2
+}
+
