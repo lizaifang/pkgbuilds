@@ -1,0 +1,29 @@
+# Maintainer : speps <speps at aur dot archlinux dot org>
+# Contributor: Elijah Perrault
+# Contributor: Dan Serban
+# Contributor: lizaifang
+
+pkgname=umplayer
+pkgver=181
+pkgrel=1
+pkgdesc="A complete front-end for MPlayer"
+arch=('i686' 'x86_64')
+url="http://www.umplayer.com/"
+license=('GPL3')
+depends=('mplayer' 'qt4')
+install="$pkgname.install"
+source=("http://sourceforge.net/code-snapshots/svn/u/um/umplayer/code/umplayer-code-181.zip")
+md5sums=('1f2705852161bd21b1373dd01a29c5fb')
+
+build() {
+  cd "$srcdir/umplayer-code-181/$pkgname/trunk"
+  sed -i "s|/packages||" Makefile
+  make QMAKE=qmake-qt4 LRELEASE=lrelease-qt4 PREFIX=/usr
+}
+
+package() {
+  cd "$srcdir/umplayer-code-181/$pkgname/trunk"
+  make PREFIX=/usr DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:
