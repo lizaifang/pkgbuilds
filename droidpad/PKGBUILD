@@ -1,0 +1,25 @@
+pkgname=droidpad
+pkgver=2.1
+pkgrel=1
+url="https://launchpad.net/droidpad-linux/"
+pkgdesc='DroidPad lets you use an Android mobile to control a joystick or mouse on a Windows or Linux computer. This is the Linux (mainly Ubuntu) client.'
+arch=('i686' 'x86_64')
+#source=("https://launchpad.net/~w-shackleton/+archive/droidpad-daily/+files/droidpad_2.1ubuntu1-0~130~raring1_amd64.deb")
+#md5sums=('882858abe4548685c4ece2a2255ecc3b')
+source=("https://launchpad.net/~w-shackleton/+archive/droidpad-daily/+files/droidpad_2.1ubuntu1-0~130~raring1.tar.gz")
+md5sums=('e682accce34abc74f45ebdfa9343a959')
+
+build()
+{
+    #cd ${srcdir}/${pkgname}-${pkgver}
+    cd ${srcdir}/recipe-\{debupstream\}-0~\{revno\}/
+	./configure --prefix=/usr || return 1
+	make || return 1
+}
+
+package()
+{
+    #cd ${srcdir}/${pkgname}-${pkgver}
+    cd ${srcdir}/recipe-\{debupstream\}-0~\{revno\}/
+    make DESTDIR=${pkgdir} install || return 1
+}
