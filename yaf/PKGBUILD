@@ -1,0 +1,26 @@
+pkgname=php-yaf
+_pkgname=yaf
+pkgver=2.2.9
+pkgrel=1
+pkgdesc='Yaf is a PHP framework similar to zend framework, which is written in c and built as PHP extension'
+url=('http://pecl.php.net/Yaf')
+arch=('i686 x86_64')
+source=("http://pecl.php.net/get/${_pkgname}-${pkgver}.tgz")
+author='Xinchen Hui'
+license=('PHP')
+page='http://www.laruence.com/yaf/'
+release_date='2013-01-04'
+#http://pecl.php.net/get/yaf-2.2.2.tgz
+md5sums=('f8ad38653199e40b2bfd3b9435a617d6')
+
+build() {
+    cd ${srcdir}/${_pkgname}-${pkgver}
+	phpize
+    ./configure --prefix=/usr || return 1
+    make
+}
+
+package() {
+    cd ${srcdir}/${_pkgname}-${pkgver}
+    make INSTALL_ROOT=${pkgdir} install || return 1
+}

@@ -1,0 +1,51 @@
+# Maintainer: Vehicle Lee <imxifs@gmail.com>
+# Contributor: Vehicle Lee <imxifs@gmail.com>
+
+pkgname=xsunpinyin-git
+pkgver=20120207
+pkgrel=1
+pkgdesc='xsunpinyin is a standalone XIM server that uses SunPinyin input methord.'
+arch=('i686' 'x86_64')
+url='http://sunpinyin.googlecode.com'
+license=('LGPL')
+depends=('gtk2' 'sunpinyin-git' 'xproto')
+makedepends=('scons')
+
+#source=("http://sunpinyin.googlecode.com/files/xsunpinyin-2.0.3.tar.gz")
+#md5sums=('bfa3a3dc8c22193b3d1fb982316d462e')
+
+_gitroot="git://github.com/sunpinyin/sunpinyin.git"
+_gitname="sunpinyin"
+
+build() {
+  cd $srcdir
+  msg "Connecting to the GIT server...."
+  
+  if [[ -d $srcdir/$_gitname ]] ; then
+    cd $_gitname
+    git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot
+  fi
+  
+  msg "GIT checkout done"
+  msg "Starting make..."
+
+  rm -rf $srcdir/$_gitname-build
+  git clone $srcdir/$_gitname $srcdir/$_gitname-build
+  cd $srcdir/$_gitname-build/wrapper/xim
+
+  #cd ${pkgname}-${pkgver}
+  #sed -i -e "s|python|python2|" python/*.py python/importer/*.py
+  sed -i -e "s|python-config|python2-config|" SConstruct
+  #export PYTHON="/usr/bin/python2"
+  #export PYTHON_CONFIG="/usr/bin/python2-config"
+  scons --prefix=/usr
+}
+
+package() {
+  #cd ${pkgname}-${pkgver}
+	cd $srcdir/$_gitname-build/wrapper/xim
+  scons --prefix=/usr --install-sandbox=${pkgdir} install
+}
